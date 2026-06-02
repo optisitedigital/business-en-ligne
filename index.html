@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & Méta Tags -->
+    <title>Business Digital | Accès Premium</title>
+    <meta name="description" content="Découvrez une opportunité de business en ligne génératrice de revenus, adaptée à votre situation.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Business Digital - Opportunité Premium">
+    <meta property="og:description" content="Découvrez une opportunité de business en ligne adaptée à votre situation.">
+    <meta property="og:image" content="logo.png">
+    
+    <!-- Polices & Icônes -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES CSS (Thème Premium Dark/Gold) --- */
+        :root {
+            --bg-main: #0B0F19; 
+            --bg-card: rgba(20, 25, 40, 0.7); 
+            --primary-gold: #D4AF37;
+            --primary-gold-light: #F3E5AB;
+            --text-white: #F8FAFC;
+            --text-gray: #94A3B8;
+            --shadow-premium: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --glow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05), transparent 25%);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- SPLASH SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #05070A;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-logo {
+            font-size: 4rem;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+        }
+
+        .splash-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--primary-gold-light), var(--primary-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .splash-loader {
+            width: 50px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .splash-loader::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 50%;
+            background: var(--primary-gold);
+            animation: slide 1.5s infinite ease-in-out;
+        }
+
+        /* --- HEADER & PROGRESS --- */
+        header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        header h1 i { color: var(--primary-gold); }
+
+        #progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.05); }
+        #progress-bar { height: 100%; width: 0%; background: var(--primary-gold); transition: width 0.8s ease; box-shadow: var(--glow-gold); }
+
+        /* --- LAYOUT & GLASS CARDS --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: var(--shadow-premium);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--text-white);
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: var(--primary-gold-light);
+            font-weight: 700;
+        }
+
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05));
+            border: 1px solid rgba(212,175,55,0.3);
+            color: var(--primary-gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            margin: 0 auto 25px auto;
+            box-shadow: var(--glow-gold);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-group { display: flex; flex-direction: column; gap: 15px; }
+
+        .btn {
+            background: linear-gradient(135deg, #E5C158, #D4AF37);
+            color: #0B0F19;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { transform: translateY(-3px); box-shadow: var(--glow-gold); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-white);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--primary-gold); }
+
+        /* --- WHATSAPP SYSTEM --- */
+        .wa-progress-container {
+            width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 15px; overflow: hidden;
+        }
+        .wa-progress-bar { height: 100%; width: 0%; background: #25D366; transition: width 0.4s ease; }
+        .wa-status { font-size: 0.9rem; color: #25D366; font-weight: 700; margin-bottom: 20px; }
+        
+        /* --- LISTES --- */
+        .benefits-list {
+            list-style: none; text-align: left; margin-bottom: 30px;
+            background: rgba(0,0,0,0.2); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .benefits-list li {
+            font-size: 1rem; color: var(--text-white); margin-bottom: 15px;
+            display: flex; align-items: flex-start; gap: 12px;
+        }
+        .benefits-list li:last-child { margin-bottom: 0; }
+        .benefits-list li i { color: var(--primary-gold); font-size: 1.2rem; margin-top: 2px; }
+
+        /* --- COMPTEUR --- */
+        .counter-box {
+            background: rgba(0,0,0,0.4); border: 1px solid var(--primary-gold);
+            padding: 25px; border-radius: 16px; margin-bottom: 30px; position: relative; overflow: hidden;
+        }
+        .counter-label { font-size: 0.85rem; color: var(--primary-gold-light); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .counter { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 800; color: #fff; text-shadow: var(--glow-gold); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes slide { 0% { left: -50%; } 100% { left: 100%; } }
+        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="splash-logo"><i class="fa-solid fa-crown"></i></div>
+        <h1 class="splash-title">BUSINESS DIGITAL</h1>
+        <p style="color: #94A3B8; letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; margin-top: 5px;">Accès Premium</p>
+        <div class="splash-loader"></div>
+    </div>
+
+    <header>
+        <h1><i class="fa-solid fa-gem"></i> Accès Exclusif</h1>
+    </header>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+
+    <main>
+        <!-- ECRAN 1 : ACCUEIL -->
+        <section id="screen-home" class="screen active">
+            <div class="icon-wrapper"><i class="fa-solid fa-rocket"></i></div>
+            <h2>Bienvenue</h2>
+            <p>Vous êtes sur le point de découvrir une méthode <span class="highlight">éprouvée</span> pour générer des revenus sur Internet.</p>
+            <div class="btn-group">
+                <button class="btn" onclick="goToScreen('screen-share', 10)">Déverrouiller l'accès <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- ECRAN 2 : PARTAGE WHATSAPP (OBLIGATOIRE) -->
+        <section id="screen-share" class="screen">
+            <div class="icon-wrapper" style="color: #25D366; background: rgba(37, 211, 102, 0.1); border-color: #25D366; box-shadow: 0 0 20px rgba(37,211,102,0.2);">
+                <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <h2>Étape de Sécurité</h2>
+            <p>Pour éviter les robots et réserver cette opportunité aux personnes motivées, veuillez recommander cette page à <span class="highlight">5 amis ou groupes WhatsApp</span>.</p>
+            
+            <div class="wa-progress-container">
+                <div class="wa-progress-bar" id="wa-bar"></div>
+            </div>
+            <div class="wa-status" id="wa-status-text">0 / 5 Partages effectués</div>
+
+            <div class="btn-group">
+                <button id="btn-share-wa" class="btn" onclick="shareOnWhatsApp()" style="background: #25D366; color: white; animation: pulse-wa 2s infinite;">
+                    <i class="fa-brands fa-whatsapp"></i> Partager sur WhatsApp
+                </button>
+                <button id="btn-continue-wa" class="btn btn-outline" style="display: none; border-color: var(--primary-gold); color: var(--primary-gold);" onclick="goToScreen('screen-country', 20)">
+                    Accéder au Business <i class="fa-solid fa-lock-open"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ECRAN 3 : PAYS -->
+        <section id="screen-country" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-globe"></i></div>
+            <h2>Votre Localisation</h2>
+            <p>Nous adaptons les méthodes de paiement et d'encaissement selon votre région.</p>
+            <div class="btn-group">
+                <button class="btn" onclick="selectCountry('RDC')">Je suis en R.D. Congo 🇨🇩</button>
+                <button class="btn btn-outline" onclick="selectCountry('AUTRE')">Reste du Monde 🌍</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 4 : RDC MOBILE MONEY -->
+        <section id="screen-rdc-mm" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-mobile-screen"></i></div>
+            <h2 id="rdc-welcome-text" style="color:var(--primary-gold-light); font-size:1.5rem; min-height: 35px;"></h2>
+            <p>Possédez-vous un compte Mobile Money actif pour recevoir vos futurs revenus ?</p>
+            <div class="btn-group">
+                <button class="btn" onclick="goToScreen('screen-presentation', 60); startCounter(67000, 200000, ' FC');">Oui, j'en ai un</button>
+                <button class="btn btn-outline" onclick="goToScreen('screen-rdc-nomm', 40)">Non, pas encore</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 5 : RDC SANS MOBILE MONEY -->
+        <section id="screen-rdc-nomm" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h2>Action Requise</h2>
+            <p>Vous devez absolument avoir un moyen d'encaisser votre argent.</p>
+            <ul class="benefits-list">
+                <li><i class="fa-solid fa-sim-card"></i> Achetez une SIM locale (Airtel/Vodacom/Orange).</li>
+                <li><i class="fa-solid fa-download"></i> Installez l'application mobile correspondante.</li>
+                <li><i class="fa-solid fa-wallet"></i> Activez votre portefeuille électronique.</li>
+                <li><i class="fa-solid fa-credit-card"></i> Créez une carte Visa virtuelle (recommandé).</li>
+            </ul>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goToScreen('screen-home', 0)">Je reviens plus tard</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 6 : AUTRE PAYS MOBILE MONEY -->
+        <section id="screen-autre-mm" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-money-bill-transfer"></i></div>
+            <h2>C'est Parfait !</h2>
+            <p>Le digital n'a pas de frontières. Vous allez générer des revenus d'où que vous soyez.</p>
+            <p class="highlight">Avez-vous un moyen de paiement mobile ou bancaire local ?</p>
+            <div class="btn-group">
+                <button class="btn" onclick="goToScreen('screen-presentation', 60); startCounter(25, 100, ' USD');">Oui, je suis équipé</button>
+                <button class="btn btn-outline" onclick="goToScreen('screen-autre-nomm', 40)">Non</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 7 : AUTRE PAYS SANS MOBILE MONEY -->
+        <section id="screen-autre-nomm" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-wallet"></i></div>
+            <h2>Prérequis Manquant</h2>
+            <p>Trouvez un portefeuille numérique (Paypal, Wave, Orange Money, Banque locale...) disponible dans votre pays pour pouvoir encaisser, puis revenez.</p>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goToScreen('screen-home', 0)">Retour à l'accueil</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 8 : PRESENTATION DU BUSINESS -->
+        <section id="screen-presentation" class="screen">
+            <h2>Webmaster Indépendant</h2>
+            <p id="presentation-text" style="min-height: 60px;"></p>
+            
+            <ul class="benefits-list">
+                <li><i class="fa-solid fa-check"></i> 100% en ligne (depuis votre smartphone ou PC)</li>
+                <li><i class="fa-solid fa-check"></i> Marché international illimité</li>
+                <li><i class="fa-solid fa-check"></i> Aucune compétence technique préalable requise</li>
+            </ul>
+
+            <div class="counter-box">
+                <div class="counter-label">Objectif de revenus mensuels</div>
+                <span id="revenue-counter" class="counter">0</span>
+            </div>
+
+            <p id="invest-question" class="highlight" style="border-left: 3px solid var(--primary-gold); padding-left: 15px; text-align: left;"></p>
+            
+            <div class="btn-group" style="flex-direction: row; margin-top: 25px;">
+                <button class="btn" style="flex: 1;" onclick="goToScreen('screen-final', 90)">Oui, je suis prêt</button>
+                <button class="btn btn-outline" style="flex: 1;" onclick="goToScreen('screen-no-money', 70)">Non</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 9 : PAS ASSEZ D'ARGENT -->
+        <section id="screen-no-money" class="screen">
+            <div class="icon-wrapper"><i class="fa-solid fa-piggy-bank"></i></div>
+            <h2>Constituez votre Capital</h2>
+            <p>Toute activité rentable exige un petit investissement initial (formation, outils).</p>
+            <ul class="benefits-list">
+                <li><i class="fa-solid fa-arrow-right"></i> Économisez sur vos dépenses quotidiennes.</li>
+                <li><i class="fa-solid fa-arrow-right"></i> Vendez des objets dont vous ne vous servez plus.</li>
+                <li><i class="fa-solid fa-arrow-right"></i> Proposez de petits services autour de vous.</li>
+            </ul>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="goToScreen('screen-home', 0)">Je reviendrai préparé</button>
+            </div>
+        </section>
+
+        <!-- ECRAN 10 : CALL TO ACTION FINAL -->
+        <section id="screen-final" class="screen">
+            <div class="icon-wrapper" style="background: var(--primary-gold); color: var(--bg-main); box-shadow: 0 0 30px rgba(212,175,55,0.4); border: none;">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <h2>Le Succès Vous Attend</h2>
+            <p id="final-question" style="font-weight: 500; margin-bottom: 40px;"></p>
+            <div class="btn-group">
+                <a href="https://zbgbgtgc.mychariow.shop/guide-cash-site-web" class="btn" style="font-size: 1.2rem; padding: 20px;">
+                    ACCÉDER AU GUIDE COMPLET <i class="fa-solid fa-bolt"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let isRDC = true;
+        let shareCount = 0;
+        const requiredShares = 5;
+
+        // Webhook Discord
+        const discordWebhookUrl = 'https://discord.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-';
+
+        async function alerterVisiteDiscord() {
+            const payload = {
+                username: "System Premium Tracker",
+                embeds: [{
+                    title: "🟢 Nouveau Prospect Connecté !",
+                    color: 13938487, // Gold
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            try {
+                await fetch(discordWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            } catch(e) {}
+        }
+
+        // Init Splash Screen
+        window.addEventListener('DOMContentLoaded', () => {
+            alerterVisiteDiscord();
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.visibility = 'hidden', 800);
+            }, 2500);
+        });
+
+        // Navigation
+        function goToScreen(screenId, progress) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            if(screenId === 'screen-presentation') {
+                typeWriter("presentation-text", "La création et la monétisation de sites web est la compétence numérique la plus rentable du marché actuel.", 20);
+                let investAmount = isRDC ? "30 000 FC" : "l'équivalent de 10 USD";
+                let winAmount = isRDC ? "200 000 FC" : "100 USD";
+                document.getElementById('invest-question').innerText = `Êtes-vous prêt à investir environ ${investAmount} dans votre propre éducation financière ?`;
+                document.getElementById('final-question').innerText = `Passez à l'action maintenant pour apprendre la méthode complète et générer plus de ${winAmount} par mois.`;
+            }
+        }
+
+        // WhatsApp Share Logic (Obligatoire)
+        function shareOnWhatsApp() {
+            if(shareCount < requiredShares) {
+                shareCount++;
+                let percentage = (shareCount / requiredShares) * 100;
+                document.getElementById('wa-bar').style.width = percentage + '%';
+                document.getElementById('wa-status-text').innerText = `${shareCount} / ${requiredShares} Partages effectués`;
+                
+                // Ouvre WhatsApp
+                window.open("https://wa.me/?text=🚨%20Incroyable%20!%20D%C3%A9couvre%20comment%20lancer%20ton%20business%20en%20ligne%20facilement%20:%20" + encodeURIComponent(window.location.href), "_blank");
+
+                if(shareCount === requiredShares) {
+                    document.getElementById('btn-share-wa').style.display = 'none';
+                    document.getElementById('wa-status-text').innerText = "Vérification réussie ✅";
+                    document.getElementById('btn-continue-wa').style.display = 'flex';
+                }
+            }
+        }
+
+        // Pays logic
+        function selectCountry(country) {
+            if(country === 'RDC') {
+                isRDC = true;
+                goToScreen('screen-rdc-mm', 35);
+                setTimeout(() => typeWriter("rdc-welcome-text", "Excellent, bienvenue cher(e) compatriote. 🇨🇩", 40), 300);
+            } else {
+                isRDC = false;
+                goToScreen('screen-autre-mm', 35);
+            }
+        }
+
+        // Typewriter Effect
+        function typeWriter(elementId, text, speed) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Counter Animation
+        function startCounter(start, end, suffix) {
+            let obj = document.getElementById('revenue-counter');
+            let duration = 2000; 
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                let progress = Math.min((timestamp - startTime) / duration, 1);
+                let easeOut = 1 - Math.pow(1 - progress, 4); // Quartic ease out
+                let current = Math.floor(easeOut * (end - start) + start);
+                
+                obj.innerHTML = current.toLocaleString('fr-FR') + suffix;
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = end.toLocaleString('fr-FR') + suffix + "+";
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+    </script>
+</body>
+</html>
