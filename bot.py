@@ -2,15 +2,14 @@ import os
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-# Récupération automatique du token configuré dans Render
-TOKEN = os.getenv("TELEGRAM_TOKEN", "8548951881:AAFdCTwbMnhN7Ugd8bxUSKZXFVYEniix97A")
+# Ton token d'accès valide pour faire tourner le bot
+TOKEN = "8548951881:AAFDr7sumXgUPwOmz5htqEU8nHSN7jmMhzM"
 bot = telebot.TeleBot(TOKEN)
 
-# Fichier texte qui sert de mini base de données pour stocker les clients
 DB_FILE = "utilisateurs.txt"
 
 def sauvegarder_utilisateur(user_id):
-    """Enregistre l'ID de l'utilisateur pour pouvoir lui envoyer des messages de masse plus tard"""
+    """Enregistre chaque visiteur pour pouvoir lui envoyer des offres plus tard"""
     if not os.path.exists(DB_FILE):
         open(DB_FILE, "w").close()
     
@@ -21,86 +20,85 @@ def sauvegarder_utilisateur(user_id):
         with open(DB_FILE, "a") as f:
             f.write(f"{user_id}\n")
 
-# --- TUNNEL DE VENTE PERSUASIF ---
+# --- TUNNEL DE VENTE AVEC COPYWRITING AGRESSIF ET PERSUASIF ---
 
 @bot.message_handler(commands=['start'])
 def commande_start(message):
     sauvegarder_utilisateur(message.chat.id)
     
     texte = (
-        "👋 Bienvenue ! Je suis ton coach virtuel.\n\n"
-        "En cette année 2026, le meilleur business en ligne pour générer des revenus depuis la RDC, "
-        "c'est **la création de sites web professionnels boostée par l'Intelligence Artificielle**. 🚀\n\n"
-        "Grâce à l'IA, tu n'as plus besoin de passer des mois à apprendre à coder. Tu peux concevoir des sites "
-        "ultra-modernes pour des clients locaux (boutiques, PME, écoles) en quelques heures seulement."
+        "👋 **Salut à toi, futur entrepreneur du digital !**\n\n"
+        "Laisse-moi te poser une question honnête...\n"
+        "Combien de temps vas-tu encore passer à chercher des opportunités en ligne qui ne rapportent rien ?\n\n"
+        "En cette année 2026, il y a un secret que les experts cachent : **La création de sites web professionnels boostée par l'Intelligence Artificielle**. 🚀\n\n"
+        "C'est le business ultime en RDC. Pourquoi ? Parce que grâce à l'IA, **tu n'as plus besoin de savoir coder**, ni de passer 5 ans à l'université. Tu peux concevoir des sites magiques pour des entreprises, des boutiques ou des écoles à Kinshasa en moins de 2 heures et les revendre à prix d'or ! 💸"
     )
     
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton(text="🤔 Comment ça marche ? (Voir les étapes)", callback_data="voir_etapes"))
+    markup.add(InlineKeyboardButton(text="🎯 Découvrir la méthode exacte (3 étapes)", callback_data="voir_etapes"))
     bot.send_message(message.chat.id, texte, reply_markup=markup, parse_mode="Markdown")
 
 @bot.callback_query_handler(func=lambda call: call.data == "voir_etapes")
 def etapes_business(call):
     texte = (
-        "🎯 **Voici la feuille de route pour réussir en 2026 :**\n\n"
-        "1️⃣ **La Maîtrise :** Apprendre à utiliser les bons outils IA pour générer des structures de site web en un clic.\n"
-        "2️⃣ **Le Packaging :** Créer des offres adaptées au marché de Kinshasa et de la RDC.\n"
-        "3️⃣ **La Chasse aux Clients :** Utiliser des stratégies simples pour décrocher tes premiers contrats payants.\n\n"
-        "⚠️ *Mais attention... ce business demande du sérieux et un minimum d'engagement.*"
+        "🔥 **Voici le plan secret pour générer tes premiers revenus ce mois-ci :**\n\n"
+        "1️⃣ **L'Arme Secrète (L'IA) :** Je te montre comment utiliser les meilleurs outils IA pour générer le design d'un site complet en un seul clic.\n"
+        "2️⃣ **L'Offre Irrésistible :** Comment packager ton service pour que n'importe quelle boutique ou PME locale te supplie de travailler avec toi.\n"
+        "3️⃣ **Le Cash Flow :** Découvre mes scripts exacts de copier-coller pour démarcher et décrocher ton premier client payant en moins de 7 jours.\n\n"
+        "⚠️ *Attention : Ce plan n'est pas pour les paresseux. C'est uniquement pour ceux qui sont prêts à appliquer une méthode qui marche déjà.*"
     )
     
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton(text="⚡ Je veux me lancer !", callback_data="demande_investissement"))
+    markup.add(InlineKeyboardButton(text="⚡ Oui, je veux appliquer cette méthode !", callback_data="demande_investissement"))
     bot.edit_message_text(texte, call.message.chat.id, call.message.message_id, reply_markup=markup, parse_mode="Markdown")
 
 @bot.callback_query_handler(func=lambda call: call.data == "demande_investissement")
 def verifier_capital(call):
     texte = (
-        "Pour activer ton coaching personnalisé, obtenir la formation vidéo complète et débloquer "
-        "les outils, un micro-investissement est nécessaire.\n\n"
-        "👉 **As-tu un budget d'au moins 5 000 FC disponible pour investir dans ton avenir aujourd'hui ?**"
+        "Pour t'éviter de perdre des mois à faire des erreurs, j'ai tout résumé dans mon **Guide Pratique de 9 pages** "
+        "axé à 100% sur la réalité du marché congolais. 📚\n\n"
+        "Ce guide est ton raccourci direct vers l'indépendance financière.\n\n"
+        "👉 **As-tu un budget dérisoire d'au moins 5 000 FC prêt à être investi pour transformer tes compétences aujourd'hui ?**"
     )
     
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton(text="✅ Oui, j'ai les 5 000 FC !", callback_data="achat_formation"))
-    markup.add(InlineKeyboardButton(text="❌ Non, pas pour l'instant", callback_data="refus_capital"))
+    markup.add(InlineKeyboardButton(text="✅ Oui, j'ai les 5 000 FC ! Je fonce !", callback_data="voir_guide"))
+    markup.add(InlineKeyboardButton(text="❌ Non, je préfère attendre", callback_data="refus_capital"))
     bot.edit_message_text(texte, call.message.chat.id, call.message.message_id, reply_markup=markup)
 
-@bot.callback_query_handler(func=lambda call: call.data == "achat_formation")
-def finaliser_achat(call):
+@bot.callback_query_handler(func=lambda call: call.data == "voir_guide")
+def aller_vers_boutique(call):
     texte = (
-        "Excellent ! Tu as la bonne mentalité d'entrepreneur. ✨\n\n"
-        "**Voici ce que tu vas recevoir immédiatement après ton paiement :**\n"
-        "• 📚 La formation vidéo complète (Méthode IA 2026)\n"
-        "• 🤖 L'accès à mon coaching pour trouver ton premier client cette semaine.\n\n"
-        "📌 **Comment payer (5 000 FC) :**\n"
-        "Effectue ton transfert Mobile Money au numéro : `08XXXXXXXX` (Indique ton numéro ici)\n\n"
-        "Une fois le transfert fait, clique sur le bouton ci-dessous pour m'envoyer ta capture d'écran de confirmation. "
-        "Je validerai ton accès immédiatement !"
+        "🚀 **Félicitations ! Tu as la mentalité des 1% qui réussissent.**\n\n"
+        "Pour récupérer ton exemplaire du guide et commencer à te lancer dès aujourd'hui, tu as **deux options ultra-simples** :\n\n"
+        "➡️ **Option 1 :** Commande directement sur ma boutique en ligne sécurisée par Mobile Money (livraison instantanée).\n\n"
+        "➡️ **Option 2 :** Contacte-moi directement sur WhatsApp / Téléphone pour faire ton transfert manuellement et recevoir ton accès."
     )
     
     markup = InlineKeyboardMarkup()
-    # Pense à remplacer 'TonNomUtilisateurTelegram' par ton vrai @pseudo Telegram sans le @
-    markup.add(InlineKeyboardButton(text="📨 Envoyer ma preuve de paiement", url="https://t.me/TonNomUtilisateurTelegram"))
-    bot.edit_message_text(texte, call.message.chat.id, call.message.message_id, reply_markup=markup, parse_mode="Markdown")
+    # Option 1 : Lien exact de ta boutique Chariow Shop
+    markup.add(InlineKeyboardButton(text="🛒 Option 1 : Acheter sur la Boutique en ligne", url="https://zbgbgtgc.mychariow.shop/guide-creer-site-web"))
+    # Option 2 : Lien vers ton WhatsApp (Remplace bien le numéro fictif ci-dessous)
+    markup.add(InlineKeyboardButton(text="💬 Option 2 : Acheter direct par WhatsApp", url="https://wa.me/243XXXXXXXXX"))
+    
+    bot.edit_message_text(texte, call.message.chat.id, call.message.message_id, reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: call.data == "refus_capital")
 def reponse_refus(call):
     texte = (
-        "Je comprends parfaitement. Créer un vrai business demande un minimum de ressources "
-        "pour la connexion et les outils.\n\n"
-        "Reste connecté sur ce bot, je partagerai régulièrement des conseils gratuits ici ! 💪"
+        "Je comprends. Sache que pour gagner de l'argent, il faut accepter d'investir un minimum sur soi-même. "
+        "Le prix d'un simple forfait internet peut lancer ta carrière.\n\n"
+        "Reste ici, je partagerai des conseils gratuits de temps en temps. Bon succès ! 💪"
     )
     bot.edit_message_text(texte, call.message.chat.id, call.message.message_id)
 
 # --- SYSTEME DE MESSAGES DE MASSE (BROADCAST) ---
 
-# RAPPEL : Remplace ceci par ton propre ID Telegram (obtenu via le bot @userinfobot)
+# TODO: Remplace 123456789 par ton propre ID Telegram unique pour utiliser la commande /broadcast
 ADMIN_ID = 123456789  
 
 @bot.message_handler(commands=['broadcast'])
 def distribuer_message(message):
-    """Permet à l'admin d'envoyer un message à tous les utilisateurs. Exemple: /broadcast Promo spéciale !"""
     if message.chat.id != ADMIN_ID:
         bot.reply_to(message, "❌ Option réservée à l'administrateur.")
         return
@@ -124,9 +122,10 @@ def distribuer_message(message):
             bot.send_message(int(u_id), texte_a_envoyer)
             succes += 1
         except Exception:
-            pass  # Ignore si un utilisateur a bloqué le bot
+            pass  
             
     bot.reply_to(message, f"📢 Message envoyé avec succès à {succes} abonnés !")
 
 if __name__ == "__main__":
+    print("Le robot Optisite Digital survolté est prêt...")
     bot.infinity_polling()
