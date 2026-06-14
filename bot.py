@@ -1,8 +1,25 @@
 import os
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from threading import Thread
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# Ton token d'accès valide pour faire tourner le bot
+# --- CONFIGURATION DU MINI-SERVEUR GRATUIT POUR RENDER ---
+class SimpleServer(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"Bot Optisite Digital en cours d'execution...")
+
+def run_web_server():
+    # Render va trouver le port automatiquement grâce à cette ligne
+    port = int(os.getenv("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), SimpleServer)
+    print(f"Mini-serveur active sur le port {port}")
+    server.serve_forever()
+
+# --- TON CODE TELEGRAM ---
 TOKEN = "8548951881:AAFDr7sumXgUPwOmz5htqEU8nHSN7jmMhzM"
 bot = telebot.TeleBot(TOKEN)
 
@@ -20,7 +37,7 @@ def sauvegarder_utilisateur(user_id):
         with open(DB_FILE, "a") as f:
             f.write(f"{user_id}\n")
 
-# --- TUNNEL DE VENTE AVEC COPYWRITING AGRESSIF ET PERSUASIF ---
+# --- TUNNEL DE VENTE AVEC COPYWRITING ---
 
 @bot.message_handler(commands=['start'])
 def commande_start(message):
@@ -72,14 +89,14 @@ def aller_vers_boutique(call):
         "🚀 **Félicitations ! Tu as la mentalité des 1% qui réussissent.**\n\n"
         "Pour récupérer ton exemplaire du guide et commencer à te lancer dès aujourd'hui, tu as **deux options ultra-simples** :\n\n"
         "➡️ **Option 1 :** Commande directement sur ma boutique en ligne sécurisée par Mobile Money (livraison instantanée).\n\n"
-        "➡️ **Option 2 :** Contacte-moi directement sur WhatsApp / Téléphone pour faire ton transfert manuellement et recevoir ton accès."
+        "➡️ **Option 2 :** Contacte-moi directement sur WhatsApp pour faire ton transfert manuellement et recevoir ton accès."
     )
     
     markup = InlineKeyboardMarkup()
-    # Option 1 : Lien exact de ta boutique Chariow Shop
+    # Option 1 : Ton lien exact de boutique Chariow Shop
     markup.add(InlineKeyboardButton(text="🛒 Option 1 : Acheter sur la Boutique en ligne", url="https://zbgbgtgc.mychariow.shop/guide-creer-site-web"))
-    # Option 2 : Lien vers ton WhatsApp (Remplace bien le numéro fictif ci-dessous)
-    markup.add(InlineKeyboardButton(text="💬 Option 2 : Acheter direct par WhatsApp", url="https://wa.me/243XXXXXXXXX"))
+    # Option 2 : Lien vers ton WhatsApp (Pense à remplacer les XXXXXXXXX par ton numéro)
+    markup.add(InlineKeyboardButton(text="💬 Option 2 : Acheter direct par WhatsApp", url="https://wa.me/243977092549"))
     
     bot.edit_message_text(texte, call.message.chat.id, call.message.message_id, reply_markup=markup)
 
@@ -94,38 +111,27 @@ def reponse_refus(call):
 
 # --- SYSTEME DE MESSAGES DE MASSE (BROADCAST) ---
 
-# TODO: Remplace 123456789 par ton propre ID Telegram unique pour utiliser la commande /broadcast
 ADMIN_ID = 123456789  
 
 @bot.message_handler(commands=['broadcast'])
 def distribuer_message(message):
     if message.chat.id != ADMIN_ID:
-        bot.reply_to(message, "❌ Option réservée à l'administrateur.")
         return
-    
     texte_a_envoyer = message.text.replace("/broadcast", "").strip()
-    
-    if not texte_a_envoyer:
-        bot.reply_to(message, "⚠️ Utilisation : `/broadcast Ton message ici`")
+    if not texte_a_envoyer or not os.path.exists(DB_FILE):
         return
-        
-    if not os.path.exists(DB_FILE):
-        bot.reply_to(message, "👥 Aucun utilisateur dans la base de données.")
-        return
-        
     with open(DB_FILE, "r") as f:
         utilisateurs = f.read().splitlines()
-        
-    succes = 0
     for u_id in utilisateurs:
-        try:
-            bot.send_message(int(u_id), texte_a_envoyer)
-            succes += 1
-        except Exception:
-            pass  
-            
-    bot.reply_to(message, f"📢 Message envoyé avec succès à {succes} abonnés !")
+        try: bot.send_message(int(u_id), texte_a_envoyer)
+        except: pass
 
 if __name__ == "__main__":
+    # On lance le serveur web en arrière-plan pour valider le port Render gratuitement
+    server_thread = Thread(target=run_web_server)
+    server_thread.daemon = True
+    server_thread.start()
+    
+    # On lance le bot Telegram
     print("Le robot Optisite Digital survolté est prêt...")
     bot.infinity_polling()
